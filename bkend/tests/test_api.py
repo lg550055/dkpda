@@ -1,3 +1,4 @@
+import asyncio
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -97,3 +98,22 @@ def test_update_and_delete_endpoints(in_memory_session):
     # get should raise HTTPException
     with pytest.raises(Exception):
         app_main.get_article(article_id=art.id, current_user=admin, db=db)
+
+
+def test_admin_users_endpoint_access_control(in_memory_session):
+    db = in_memory_session
+    # create non-admin user
+    user = crud.create_user(db, email="normal@example.com", hashed_password="pw")
+
+    # non-admin should be rejected: call the async admin-check helper directly
+    with pytest.raises(Exception):
+        asyncio.run(app_main.get_admin_user(user))
+
+    # create admin user and ensure access
+    admin = crud.create_user(db, email="admin@example.com", hashed_password="pw")
+    admin.is_admin = True
+    db.commit()
+
+    users = app_main.list_all_users(current_user=admin, db=db)
+    assert isinstance(users, list)
+    assert any(u.email == "admin@example.com" for u in users)

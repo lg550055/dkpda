@@ -28,8 +28,6 @@ pip install -r bkend/requirements.txt
 Preferred: run the package as a module from the repository root:
 
 ```bash
-python -m bkend.main
-# or with uvicorn for production-like server
 uvicorn bkend.main:app --reload
 ```
 

@@ -67,6 +67,7 @@ def verify_password(plain_password, hashed_password):
     sha_hex = hashlib.sha256(plain_bytes).hexdigest()
     return pwd_context.verify(sha_hex, hashed_password)
 
+
 def get_password_hash(password):
     # Compute SHA-256 hex digest of the password and hash that with our
     # CryptContext (PBKDF2-SHA256). The pre-hash is defensive and preserves
@@ -78,6 +79,7 @@ def get_password_hash(password):
     sha_hex = hashlib.sha256(pw_bytes).hexdigest()
     return pwd_context.hash(sha_hex)
 
+
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
     if expires_delta:
@@ -87,6 +89,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
 
 async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
@@ -107,6 +110,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
         raise credentials_exception
     return user
 
+
 async def get_admin_user(current_user: User = Depends(get_current_user)):
     if not current_user.is_admin:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin privileges required")
@@ -121,6 +125,7 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
     hashed_password = get_password_hash(user.password)
     db_user = create_user(db, email=user.email, hashed_password=hashed_password)
     return db_user
+
 
 @app.post("/token", response_model=schemas.Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
@@ -137,18 +142,30 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
+
 @app.get("/users/me", response_model=schemas.UserResponse)
 async def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
+
+
+@app.get("/admin/users", response_model=List[schemas.UserResponse])
+def list_all_users(current_user: User = Depends(get_admin_user), db: Session = Depends(get_db)):
+    """Admin-only: return all users"""
+    users_q = select(User)
+    users = db.execute(users_q).scalars().all()
+    return users
+
 
 @app.post("/articles", response_model=schemas.ArticleResponse, status_code=status.HTTP_201_CREATED)
 def create_article(article: schemas.ArticleCreate, current_user: User = Depends(get_admin_user), db: Session = Depends(get_db)):
     db_article = crud_create_article(db, title=article.title, content=article.content, author_id=current_user.id)
     return {**db_article.__dict__, "upvotes": 0, "downvotes": 0, "user_vote": None}
 
+
 @app.get("/articles", response_model=List[schemas.ArticleResponse])
 def get_articles(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return get_articles_with_votes(db, current_user.id)
+
 
 @app.get("/articles/{article_id}", response_model=schemas.ArticleResponse)
 def get_article(article_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
@@ -156,6 +173,7 @@ def get_article(article_id: int, current_user: User = Depends(get_current_user),
     if not article:
         raise HTTPException(status_code=404, detail="Article not found")
     return article
+
 
 @app.put("/articles/{article_id}", response_model=schemas.ArticleResponse)
 def update_article(article_id: int, article_update: schemas.ArticleUpdate, current_user: User = Depends(get_admin_user), db: Session = Depends(get_db)):
@@ -166,12 +184,14 @@ def update_article(article_id: int, article_update: schemas.ArticleUpdate, curre
     downvotes = db.execute(select(func.count()).select_from(Vote).where(Vote.article_id == db_article.id, Vote.vote_type == VoteType.DOWNVOTE)).scalar_one()
     return {**db_article.__dict__, "upvotes": upvotes, "downvotes": downvotes, "user_vote": None}
 
+
 @app.delete("/articles/{article_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_article(article_id: int, current_user: User = Depends(get_admin_user), db: Session = Depends(get_db)):
     ok = crud_delete_article(db, article_id=article_id)
     if not ok:
         raise HTTPException(status_code=404, detail="Article not found")
     return None
+
 
 @app.post("/articles/{article_id}/vote", status_code=status.HTTP_200_OK)
 def vote_article(article_id: int, vote: schemas.VoteCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
@@ -181,13 +201,10 @@ def vote_article(article_id: int, vote: schemas.VoteCreate, current_user: User =
     add_or_toggle_vote(db, article_id=article_id, user_id=current_user.id, vote_type=vote.vote_type)
     return {"message": "Vote recorded successfully"}
 
+
 @app.delete("/articles/{article_id}/vote", status_code=status.HTTP_200_OK)
 def remove_vote(article_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     ok = crud_remove_vote(db, article_id=article_id, user_id=current_user.id)
     if not ok:
         raise HTTPException(status_code=404, detail="Vote not found")
     return {"message": "Vote removed successfully"}
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
