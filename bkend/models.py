@@ -1,7 +1,10 @@
-from sqlalchemy import create_engine, String, Boolean, ForeignKey, DateTime, Enum as SQLEnum
-from sqlalchemy.orm import declarative_base, relationship, Mapped, mapped_column, Session
 from datetime import datetime
-from typing import Optional, List
+from typing import List, Optional
+
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, create_engine
+from sqlalchemy import Enum as SQLEnum
+from sqlalchemy.orm import Mapped, Session, declarative_base, mapped_column, relationship
+
 from .schemas import VoteType
 
 DATABASE_URL = "sqlite:///./articles.db"

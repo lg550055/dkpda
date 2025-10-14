@@ -1,9 +1,11 @@
-from typing import Optional, List, Dict, Any
-from sqlalchemy.orm import Session
-from sqlalchemy import select, func
-from .models import User, Article, Vote
-from .schemas import VoteType
 from datetime import datetime
+from typing import Any, Dict, List, Optional
+
+from sqlalchemy import func, select
+from sqlalchemy.orm import Session
+
+from .models import Article, User, Vote
+from .schemas import VoteType
 
 # Users
 def get_user_by_email(db: Session, email: str) -> Optional[User]:

@@ -1,7 +1,8 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+import enum
 from datetime import datetime
 from typing import Optional
-import enum
+
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 # Enum used by request/response schemas. Kept here to avoid creating a
