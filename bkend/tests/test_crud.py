@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from bkend import models, crud
-from bkend.types import VoteType
+from bkend.schemas import VoteType
 
 
 @pytest.fixture()

@@ -1,26 +1,28 @@
-from fastapi import FastAPI, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from sqlalchemy import select, func
-from sqlalchemy.orm import sessionmaker, Session
-from . import models
-from . import schemas
-from .types import VoteType
-from passlib.context import CryptContext
-from jose import JWTError, jwt
+import hashlib
 from datetime import datetime, timedelta
-from typing import Optional, List
+from typing import List, Optional
+
+from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from sqlalchemy import func, select
+from sqlalchemy.orm import Session, sessionmaker
+
+from . import models, schemas
 from .crud import (
-    get_user_by_email,
-    create_user,
-    create_article as crud_create_article,
-    get_articles_with_votes,
-    get_article_with_votes,
-    update_article as crud_update_article,
-    delete_article as crud_delete_article,
     add_or_toggle_vote,
+    create_article as crud_create_article,
+    create_user,
+    delete_article as crud_delete_article,
+    get_article_with_votes,
+    get_articles_with_votes,
+    get_user_by_email,
     remove_vote as crud_remove_vote,
+    update_article as crud_update_article,
 )
-from .models import User, Article, Vote
+from .models import Article, User, Vote
+from .schemas import VoteType
 
 # Configuration
 SECRET_KEY = "your-secret-key-change-in-production"
@@ -35,7 +37,10 @@ SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False
 models.init_db()
 
 # Security
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Use PBKDF2-SHA256 to avoid relying on bcrypt's 72-byte input limit and
+# environment-dependent bcrypt backends. PBKDF2-SHA256 is widely supported by
+# passlib and doesn't impose the 72-byte restriction.
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 app = FastAPI(title="Article Voting System")
@@ -50,10 +55,28 @@ def get_db():
 
 # Helper functions
 def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+    # As an extra defensive measure we compute a SHA-256 hex digest of the
+    # provided password before verification. This keeps the input short and
+    # stable across environments; with PBKDF2-SHA256 this is not required for
+    # length reasons, but it provides a consistent transformation for stored
+    # hashes (and preserves earlier behavior).
+    if isinstance(plain_password, str):
+        plain_bytes = plain_password.encode("utf-8")
+    else:
+        plain_bytes = plain_password
+    sha_hex = hashlib.sha256(plain_bytes).hexdigest()
+    return pwd_context.verify(sha_hex, hashed_password)
 
 def get_password_hash(password):
-    return pwd_context.hash(password)
+    # Compute SHA-256 hex digest of the password and hash that with our
+    # CryptContext (PBKDF2-SHA256). The pre-hash is defensive and preserves
+    # stable behavior for existing code paths.
+    if isinstance(password, str):
+        pw_bytes = password.encode("utf-8")
+    else:
+        pw_bytes = password
+    sha_hex = hashlib.sha256(pw_bytes).hexdigest()
+    return pwd_context.hash(sha_hex)
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()

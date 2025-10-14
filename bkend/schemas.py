@@ -1,7 +1,16 @@
 from pydantic import BaseModel, EmailStr, ConfigDict
 from datetime import datetime
 from typing import Optional
-from .types import VoteType
+import enum
+
+
+# Enum used by request/response schemas. Kept here to avoid creating a
+# separate top-level module (like `types.py`) which can shadow stdlib modules
+# and cause import-time issues. This keeps the enum next to the schemas that
+# consume it.
+class VoteType(enum.Enum):
+    UPVOTE = "upvote"
+    DOWNVOTE = "downvote"
 
 
 class UserCreate(BaseModel):

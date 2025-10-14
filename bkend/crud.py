@@ -2,7 +2,7 @@ from typing import Optional, List, Dict, Any
 from sqlalchemy.orm import Session
 from sqlalchemy import select, func
 from .models import User, Article, Vote
-from .types import VoteType
+from .schemas import VoteType
 from datetime import datetime
 
 # Users

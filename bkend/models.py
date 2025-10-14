@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, String, Boolean, ForeignKey, DateTime, Enu
 from sqlalchemy.orm import declarative_base, relationship, Mapped, mapped_column, Session
 from datetime import datetime
 from typing import Optional, List
-from .types import VoteType
+from .schemas import VoteType
 
 DATABASE_URL = "sqlite:///./articles.db"
 

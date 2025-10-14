@@ -3,8 +3,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from bkend import models, crud, main as app_main, schemas
-from bkend.types import VoteType
+from bkend import models, crud, main as app_main
+from bkend.schemas import VoteType, UserCreate, ArticleCreate, ArticleUpdate, VoteCreate
 
 
 @pytest.fixture()
@@ -26,7 +26,7 @@ def in_memory_session():
 
 def test_register_endpoint(in_memory_session):
     db = in_memory_session
-    user_in = schemas.UserCreate(email="unit@example.com", password="pw")
+    user_in = UserCreate(email="unit@example.com", password="pw")
     # Monkeypatch password hasher to avoid passlib/bcrypt backend issues in tests
     orig_hasher = app_main.get_password_hash
     app_main.get_password_hash = lambda p: "hashed_test"
@@ -51,7 +51,7 @@ def test_article_crud_and_vote_flow(in_memory_session):
     voter = crud.create_user(db, email="voter2@example.com", hashed_password="pw")
 
     # create article via endpoint
-    art_in = schemas.ArticleCreate(title="Unit Article", content="body")
+    art_in = ArticleCreate(title="Unit Article", content="body")
     created = app_main.create_article(art_in, current_user=admin, db=db)
     assert created["title"] == "Unit Article"
     article_id = created["id"]
@@ -61,7 +61,7 @@ def test_article_crud_and_vote_flow(in_memory_session):
     assert any(a["id"] == article_id for a in articles)
 
     # vote via endpoint
-    vote_in = schemas.VoteCreate(vote_type=VoteType.UPVOTE)
+    vote_in = VoteCreate(vote_type=VoteType.UPVOTE)
     resp = app_main.vote_article(article_id=article_id, vote=vote_in, current_user=voter, db=db)
     assert resp["message"] == "Vote recorded successfully"
 
@@ -87,7 +87,7 @@ def test_update_and_delete_endpoints(in_memory_session):
     art = crud.create_article(db, title="TBD", content="c", author_id=admin.id)
 
     # update
-    updated = app_main.update_article(article_id=art.id, article_update=schemas.ArticleUpdate(title="NewTitle"), current_user=admin, db=db)
+    updated = app_main.update_article(article_id=art.id, article_update=ArticleUpdate(title="NewTitle"), current_user=admin, db=db)
     assert updated["title"] == "NewTitle"
 
     # delete
