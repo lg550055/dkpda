@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from datetime import datetime
 from typing import Optional
 from .types import VoteType
@@ -13,9 +13,7 @@ class UserResponse(BaseModel):
     email: str
     is_admin: bool
     created_at: datetime
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Token(BaseModel):
     access_token: str
@@ -43,8 +41,7 @@ class ArticleResponse(BaseModel):
     downvotes: int
     user_vote: Optional[str] = None
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class VoteCreate(BaseModel):
     vote_type: VoteType
