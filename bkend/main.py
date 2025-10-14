@@ -2,7 +2,7 @@ import hashlib
 from datetime import datetime, timedelta
 from typing import List, Optional
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -115,6 +115,29 @@ async def get_admin_user(current_user: User = Depends(get_current_user)):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin privileges required")
     return current_user
 
+
+async def optional_current_user(request: Request, db: Session = Depends(get_db)) -> Optional[User]:
+    """Return the current user if a valid token is present, otherwise None.
+
+    This helper lets endpoints be open to anonymous users while still
+    supporting authenticated behavior when a Bearer token is provided.
+    """
+    auth = request.headers.get("authorization")
+    if not auth:
+        return None
+    try:
+        token = await oauth2_scheme(request)
+    except Exception:
+        return None
+    # oauth2_scheme may return None; ensure token is a str before calling
+    # get_current_user which requires a string token parameter.
+    if not token:
+        return None
+    try:
+        return await get_current_user(token, db)
+    except Exception:
+        return None
+
 # API Endpoints
 @app.post("/register", response_model=schemas.UserResponse)
 def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
@@ -162,13 +185,15 @@ def create_article(article: schemas.ArticleCreate, current_user: User = Depends(
 
 
 @app.get("/articles", response_model=List[schemas.ArticleResponse])
-def get_articles(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    return get_articles_with_votes(db, current_user.id)
+def get_articles(current_user: Optional[User] = Depends(optional_current_user), db: Session = Depends(get_db)):
+    user_id = current_user.id if current_user is not None else 0
+    return get_articles_with_votes(db, user_id)
 
 
 @app.get("/articles/{article_id}", response_model=schemas.ArticleResponse)
-def get_article(article_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    article = get_article_with_votes(db, article_id, current_user.id)
+def get_article(article_id: int, current_user: Optional[User] = Depends(optional_current_user), db: Session = Depends(get_db)):
+    user_id = current_user.id if current_user is not None else 0
+    article = get_article_with_votes(db, article_id, user_id)
     if not article:
         raise HTTPException(status_code=404, detail="Article not found")
     return article
