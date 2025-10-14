@@ -9,7 +9,7 @@ from passlib.context import CryptContext
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session, sessionmaker
 
-from . import models, schemas
+from . import schemas
 from .crud import (
     add_or_toggle_vote,
     create_article as crud_create_article,
@@ -21,7 +21,7 @@ from .crud import (
     remove_vote as crud_remove_vote,
     update_article as crud_update_article,
 )
-from .models import Article, User, Vote
+from .models import Article, User, Vote, engine, init_db
 from .schemas import VoteType
 
 # Configuration
@@ -30,11 +30,10 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 DATABASE_URL = "sqlite:///./articles.db"
 
-# Database setup (use models module)
+# Database setup
 # SessionLocal is a simple factory returning SQLAlchemy Session instances
-engine = models.engine
 SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False, class_=Session)
-models.init_db()
+init_db()
 
 # Security
 # Use PBKDF2-SHA256 to avoid relying on bcrypt's 72-byte input limit and

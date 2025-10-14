@@ -27,9 +27,7 @@ def main() -> None:
     """Populate the database with an admin user, if one does not already exist,
     or promote the existing user to admin..
 
-    Run as a module from the project root:
-
-        python -m bkend.scripts.populate_db
+    Run from the project root:  python -m bkend.scripts.populate_db
     """
     models.init_db()
     email = "admin@ex.com"
