@@ -6,9 +6,9 @@ from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 # Enum used by request/response schemas. Kept here to avoid creating a
-# separate top-level module (like `types.py`) which can shadow stdlib modules
-# and cause import-time issues. This keeps the enum next to the schemas that
-# consume it.
+# separate top-level module (like `types.py`) which can shadow stdlib
+# modules and cause import-time issues. Keeping the enum next to the schemas
+# that consume it reduces import-time complications.
 class VoteType(enum.Enum):
     UPVOTE = "upvote"
     DOWNVOTE = "downvote"
@@ -17,6 +17,7 @@ class VoteType(enum.Enum):
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
+
 
 class UserResponse(BaseModel):
     id: int
@@ -36,9 +37,11 @@ class ArticleCreate(BaseModel):
     title: str
     content: str
 
+
 class ArticleUpdate(BaseModel):
     title: Optional[str] = None
     content: Optional[str] = None
+
 
 class ArticleResponse(BaseModel):
     id: int
@@ -52,6 +55,7 @@ class ArticleResponse(BaseModel):
     user_vote: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
+
 
 class VoteCreate(BaseModel):
     vote_type: VoteType
