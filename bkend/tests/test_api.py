@@ -88,11 +88,15 @@ def test_update_and_delete_endpoints(in_memory_session):
     art = crud.create_article(db, title="TBD", content="c", author_id=admin.id)
 
     # update
-    updated = app_main.update_article(article_id=art.id, article_update=ArticleUpdate(title="NewTitle"), current_user=admin, db=db)
+    updated = app_main.update_article(
+        article_id=art.id,
+        article_update=ArticleUpdate(title="NewTitle"),
+        db=db
+    )
     assert updated["title"] == "NewTitle"
 
     # delete
-    resp = app_main.delete_article(article_id=art.id, current_user=admin, db=db)
+    resp = app_main.delete_article(article_id=art.id, db=db)
     assert resp is None
 
     # get should raise HTTPException

@@ -112,7 +112,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
 
 async def get_admin_user(current_user: User = Depends(get_current_user)):
     if not current_user.is_admin:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin privileges required")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin status required")
     return current_user
 
 
@@ -179,19 +179,34 @@ def list_all_users(current_user: User = Depends(get_admin_user), db: Session = D
 
 
 @app.post("/articles", response_model=schemas.ArticleResponse, status_code=status.HTTP_201_CREATED)
-def create_article(article: schemas.ArticleCreate, current_user: User = Depends(get_admin_user), db: Session = Depends(get_db)):
-    db_article = crud_create_article(db, title=article.title, content=article.content, author_id=current_user.id)
+def create_article(
+    article: schemas.ArticleCreate,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    db_article = crud_create_article(
+        db, title=article.title,
+        content=article.content,
+        author_id=current_user.id
+    )
     return {**db_article.__dict__, "upvotes": 0, "downvotes": 0, "user_vote": None}
 
 
 @app.get("/articles", response_model=List[schemas.ArticleResponse])
-def get_articles(current_user: Optional[User] = Depends(optional_current_user), db: Session = Depends(get_db)):
+def get_articles(
+    current_user: Optional[User] = Depends(optional_current_user),
+    db: Session = Depends(get_db)
+):
     user_id = current_user.id if current_user is not None else 0
     return get_articles_with_votes(db, user_id)
 
 
 @app.get("/articles/{article_id}", response_model=schemas.ArticleResponse)
-def get_article(article_id: int, current_user: Optional[User] = Depends(optional_current_user), db: Session = Depends(get_db)):
+def get_article(
+    article_id: int,
+    current_user: Optional[User] = Depends(optional_current_user),
+    db: Session = Depends(get_db)
+):
     user_id = current_user.id if current_user is not None else 0
     article = get_article_with_votes(db, article_id, user_id)
     if not article:
@@ -200,17 +215,39 @@ def get_article(article_id: int, current_user: Optional[User] = Depends(optional
 
 
 @app.put("/articles/{article_id}", response_model=schemas.ArticleResponse)
-def update_article(article_id: int, article_update: schemas.ArticleUpdate, current_user: User = Depends(get_admin_user), db: Session = Depends(get_db)):
-    db_article = crud_update_article(db, article_id=article_id, title=article_update.title, content=article_update.content)
+def update_article(
+    article_id: int,
+    article_update: schemas.ArticleUpdate,
+    _current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    db_article = crud_update_article(
+        db,
+        article_id=article_id,
+        title=article_update.title,
+        content=article_update.content
+    )
     if not db_article:
         raise HTTPException(status_code=404, detail="Article not found")
-    upvotes = db.execute(select(func.count()).select_from(Vote).where(Vote.article_id == db_article.id, Vote.vote_type == VoteType.UPVOTE)).scalar_one()
-    downvotes = db.execute(select(func.count()).select_from(Vote).where(Vote.article_id == db_article.id, Vote.vote_type == VoteType.DOWNVOTE)).scalar_one()
+    upvotes = db.execute(
+        select(func.count())
+        .select_from(Vote)
+        .where(Vote.article_id == db_article.id, Vote.vote_type == VoteType.UPVOTE)
+        ).scalar_one()
+    downvotes = db.execute(
+        select(func.count())
+        .select_from(Vote)
+        .where(Vote.article_id == db_article.id, Vote.vote_type == VoteType.DOWNVOTE)
+        ).scalar_one()
     return {**db_article.__dict__, "upvotes": upvotes, "downvotes": downvotes, "user_vote": None}
 
 
 @app.delete("/articles/{article_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_article(article_id: int, current_user: User = Depends(get_admin_user), db: Session = Depends(get_db)):
+def delete_article(
+    article_id: int,
+    _current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
     ok = crud_delete_article(db, article_id=article_id)
     if not ok:
         raise HTTPException(status_code=404, detail="Article not found")
@@ -218,7 +255,12 @@ def delete_article(article_id: int, current_user: User = Depends(get_admin_user)
 
 
 @app.post("/articles/{article_id}/vote", status_code=status.HTTP_200_OK)
-def vote_article(article_id: int, vote: schemas.VoteCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def vote_article(
+    article_id: int,
+    vote: schemas.VoteCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     article = db.execute(select(Article).where(Article.id == article_id)).scalars().first()
     if not article:
         raise HTTPException(status_code=404, detail="Article not found")
@@ -227,7 +269,11 @@ def vote_article(article_id: int, vote: schemas.VoteCreate, current_user: User =
 
 
 @app.delete("/articles/{article_id}/vote", status_code=status.HTTP_200_OK)
-def remove_vote(article_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def remove_vote(
+    article_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     ok = crud_remove_vote(db, article_id=article_id, user_id=current_user.id)
     if not ok:
         raise HTTPException(status_code=404, detail="Vote not found")

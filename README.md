@@ -2,7 +2,9 @@
 Your source of daily satire
 
 ### Backend
-FastAPI powering CRUD operations of articles, users, and voting. Implemented with FastAPI, SQLAlchemy 2.0 style ORM, and Pydantic v2 schemas. Tests are included under `bkend/tests/`.
+FastAPI powering CRUD operations of articles, users, and voting.
+Implemented with FastAPI, SQLAlchemy 2.0 style ORM, and Pydantic v2 schemas.
+Unit tests are under `bkend/tests/`.
 
 #### Quick start
 
@@ -40,7 +42,7 @@ Run the test suite using the project's Python interpreter (virtualenv):
 
 ```bash
 cd /path/to/dkpda
-/path/to/dkpda/bkend/venv/bin/python -m pytest -q
+/path/to/dkpda/bkend/venv/bin/python -m pytest
 ```
 
 You should see the unit tests pass (the project currently includes CRUD and
