@@ -1,8 +1,10 @@
+import os
 import hashlib
 from datetime import datetime, timedelta
 from typing import List, Optional
 
 from fastapi import Depends, FastAPI, HTTPException, Request, status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -28,7 +30,6 @@ from .schemas import VoteType
 SECRET_KEY = "your-secret-key-change-in-production"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
-DATABASE_URL = "sqlite:///./articles.db"
 
 # Database setup
 # SessionLocal is a simple factory returning SQLAlchemy Session instances
@@ -43,6 +44,23 @@ pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 app = FastAPI(title="Article Voting System")
+
+# CORS configuration
+# Allow origins configured via BACKEND_CORS_ORIGINS env var as a comma-separated
+# list. If not set, default to allowing all origins (useful for quick local dev).
+raw_origins = os.getenv("BACKEND_CORS_ORIGINS", "*")
+if raw_origins == "*":
+    allow_origins = ["*"]
+else:
+    allow_origins = [o.strip() for o in raw_origins.split(",") if o.strip()]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allow_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Dependency
 def get_db():

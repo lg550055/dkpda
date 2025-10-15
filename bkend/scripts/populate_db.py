@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 import hashlib
 
 from bkend import models
-from bkend.crud import create_user, get_user_by_email
+from bkend.crud import create_user, get_user_by_email, create_article
+from sqlalchemy import select
 
 
 PWD_CONTEXT = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
@@ -54,6 +55,18 @@ def main() -> None:
             print(f"Created admin user {email} with password '{raw_password}'")
         else:
             print("Failed to create admin user")
+
+        # Create two test articles authored by the admin if they don't exist
+        admin_user = created
+        if admin_user:
+            existing_articles = db.execute(select(models.Article)).scalars().all()
+            if not existing_articles:
+                print("Adding two test articles...")
+                create_article(db, title="Welcome to Dikipedia", content="This is the first test article.", author_id=admin_user.id)
+                create_article(db, title="Second Article", content="Another satirical piece for testing.", author_id=admin_user.id)
+                print("Added test articles.")
+            else:
+                print("Articles already present; skipping test article creation.")
 
 
 if __name__ == "__main__":
