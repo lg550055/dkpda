@@ -16,185 +16,145 @@ SEED_ARTICLES = [
     ArticleCreate(
         title="Government Shutdown Enters Third Week; No One Notices",
         content=(
-            "WASHINGTON, D.C. — The federal government officially entered its third week of "
-            "a complete shutdown on Monday, and according to multiple sources, absolutely no "
-            "one has noticed.\n\n"
-            "\"I just assumed everything was running normally,\" said Karen Bellweather, a "
-            "retired schoolteacher from Ohio. \"The potholes are the same size, the DMV still "
-            "takes four hours, and my congressman still hasn't returned my email from 2019. "
-            "What exactly changed?\"\n\n"
-            "Government analysts confirmed that all measurable metrics of federal performance "
-            "— including response times, public satisfaction, and overall effectiveness — "
-            "have remained statistically identical to pre-shutdown levels.\n\n"
-            "\"We ran the numbers three times,\" said Dr. Helen Park, a public policy "
-            "researcher at Georgetown. \"There is literally no difference. If anything, the "
-            "national parks are slightly cleaner because nobody's there to leave the porta-"
-            "potties unlocked.\"\n\n"
-            "Congress has scheduled an emergency session to address the crisis but reportedly "
+            "WASHINGTON, D.C. — The federal government entered its third week of a complete "
+            "shutdown Monday, and according to a Gallup poll conducted yesterday, not a single "
+            "American has noticed.\n\n"
+            "\"The potholes are the same size, the DMV still takes four hours, and my congressman "
+            "still hasn't returned my email from 2019,\" said Rita Combs, 58, of Dayton, Ohio. "
+            "\"What exactly changed?\"\n\n"
+            "Dr. Helen Park of Georgetown's Center for Public Futility confirmed that all "
+            "measurable metrics of federal performance have remained \"statistically identical\" "
+            "to pre-shutdown levels. \"If anything, national parks are slightly cleaner,\" "
+            "she added. \"Turns out the biggest threat to public lands was the National Park "
+            "Service.\" Congress has scheduled an emergency session to address the crisis but "
             "cannot agree on which day of the week it is."
         ),
         image_url="./media/gvmtshtdwn.webp",
         category=Category.GRAFT,
     ),
     ArticleCreate(
-        title="Crypto Moguls Announce Plans to Buy Their Own Country, Immediately Disagree on Constitution",
+        title="Crypto Bros Purchase Island Nation, Collapse Government in Record 72 Hours",
         content=(
-            "MIAMI — A consortium of cryptocurrency billionaires announced Tuesday their "
-            "ambitious plan to purchase a small Pacific island nation and establish a "
-            "blockchain-based libertarian paradise. The project collapsed within 72 hours "
-            "when founders could not agree on a governance framework.\n\n"
-            "\"We all agreed that the old system is broken,\" explained co-founder Chad "
-            "Ledger, speaking from the deck of his rented yacht. \"Where we disagree is "
-            "on literally everything else. Kyle wants proof-of-stake voting. Braden insists "
-            "on a DAO-based judiciary. And someone named @CryptoViking69 keeps proposing "
-            "trial by combat.\"\n\n"
-            "The island's existing residents, a fishing community of about 300 people, "
-            "expressed relief at the project's failure. \"They offered us forty million "
-            "dollars in a currency that lost half its value during the sales pitch,\" said "
-            "village elder Tui Manu. \"We politely declined.\"\n\n"
-            "At press time, the consortium had pivoted to building a floating city, "
-            "which experts say will sink both literally and financially within the first "
-            "fiscal quarter."
+            "MIAMI — A consortium of cryptocurrency billionaires purchased the Pacific island "
+            "nation of Tavulea on Tuesday to establish a blockchain-based libertarian paradise. "
+            "The government collapsed by Friday.\n\n"
+            "\"We all agreed the old system is broken,\" explained co-founder Chad Ledger from "
+            "his rented yacht. \"Kyle wants proof-of-stake voting. Braden insists on a DAO-based "
+            "judiciary. And someone named @CryptoViking69 keeps proposing trial by combat.\"\n\n"
+            "The island's 300 residents expressed relief. \"They offered us forty million dollars "
+            "in a currency that lost half its value during the sales pitch,\" said village elder "
+            "Tui Manu. At press time, the consortium had pivoted to a floating city, which "
+            "maritime engineers say will sink both literally and financially within one fiscal quarter."
         ),
         image_url="./media/crypto-moguls.webp",
         category=Category.GRIFT,
     ),
     ArticleCreate(
-        title="Argentine President Declares Free Markets Are Great Except for the Parts That Apply to Argentina",
+        title="Milei Announces 'Freedom-Compatible Subsidies,' Dares Economists to Define the Word 'Free'",
         content=(
-            "BUENOS AIRES — Argentine President Javier Milei held an impassioned press "
-            "conference Thursday in which he praised the invisible hand of the free market "
-            "while simultaneously announcing a new round of exchange rate controls, export "
-            "restrictions, and what he described as \"freedom-compatible subsidies.\"\n\n"
-            "\"Let me be absolutely clear,\" Milei said, slamming a copy of \"The Road to "
-            "Serfdom\" on the podium. \"Free markets are the only path to prosperity. "
-            "However, Argentina's markets require a brief period of government intervention "
-            "in order to become free. It's like a caterpillar. You have to trap it in a jar "
-            "before it can become a butterfly.\"\n\n"
-            "Economists were divided on the analogy. \"That's not how butterflies work,\" "
-            "said Dr. Sofia Herrera of the University of Buenos Aires. \"And it's definitely "
-            "not how markets work either.\"\n\n"
-            "The IMF, which recently approved a $20 billion support package for Argentina, "
-            "released a two-word statement in response: \"We know.\""
+            "BUENOS AIRES — Argentine President Javier Milei held an impassioned press conference "
+            "Thursday praising the invisible hand of the free market while simultaneously announcing "
+            "exchange rate controls, export restrictions, and what he called \"freedom-compatible "
+            "subsidies.\"\n\n"
+            "\"Free markets are the only path to prosperity,\" Milei said, slamming a copy of "
+            "Hayek's *The Road to Serfdom* on the podium. \"However, Argentina's markets require "
+            "a brief period of government captivity in order to become free. It's like a butterfly. "
+            "You must trap it in a jar first.\"\n\n"
+            "\"That's not how butterflies work,\" said Dr. Sofia Herrera of the University of Buenos "
+            "Aires. \"And it's definitely not how markets work.\" The IMF, which recently approved "
+            "a $20 billion package for Argentina, released a two-word statement: \"We know.\""
         ),
         image_url="./media/milei.jpeg",
         category=Category.CRONY,
     ),
     ArticleCreate(
-        title="World Leaders Describe Peace Deal as 'Historic' Despite Neither Side Reading It",
+        title="Historic Peace Deal Signed by Two Nations Who Did Not Read It",
         content=(
-            "GENEVA — In what diplomats are calling a breakthrough for international "
-            "relations, two nations locked in a decades-long territorial dispute signed "
-            "a comprehensive peace agreement Wednesday that neither side's leadership "
-            "has actually read.\n\n"
-            "\"This is a momentous occasion,\" declared the lead negotiator, gesturing "
-            "broadly at a 400-page document on the table. \"Both parties have agreed to "
-            "the terms, which I'm told are in there somewhere. The important thing is the "
-            "photo op.\"\n\n"
-            "Sources close to the negotiations revealed that the final draft was produced "
-            "at 3 a.m. by a team of exhausted junior diplomats who \"mostly copied and "
-            "pasted from a 1997 trade agreement and hoped no one would check.\"\n\n"
-            "\"We're thrilled with the outcome,\" said a spokesperson for one of the "
-            "signatory nations. When asked which specific provisions they found most "
-            "favorable, the spokesperson smiled, said \"all of them,\" and quickly left "
-            "the room.\n\n"
-            "International law experts predict the agreement will hold for approximately "
-            "as long as it takes someone to read page 214, which accidentally cedes "
-            "a major seaport to a country that was not part of the negotiations."
+            "GENEVA — Two nations locked in a decades-long territorial dispute signed a 400-page "
+            "peace agreement Wednesday that neither side's leadership has actually read.\n\n"
+            "\"Both parties have agreed to the terms, which I'm told are in there somewhere,\" "
+            "declared lead negotiator Ambassador James Haverford, gesturing at the document. "
+            "\"The important thing is the photo op.\" Sources revealed the final draft was produced "
+            "at 3 a.m. by exhausted junior diplomats who \"mostly copy-pasted from a 1997 trade "
+            "agreement and hoped no one would check.\"\n\n"
+            "International law experts predict the deal will hold for approximately as long as it "
+            "takes someone to reach page 214, which accidentally cedes a major seaport to Finland, "
+            "a country that was not part of the negotiations."
         ),
         image_url="./media/trump-zelensky.webp",
         category=Category.NONSENSE,
     ),
     ArticleCreate(
-        title="AI Chatbot Hired as Congressional Aide Outperforms Entire Staff by Doing Absolutely Nothing",
+        title="AI Chatbot Hired as Congressional Aide Becomes Office's Most Ethical Employee by Doing Nothing",
         content=(
-            "WASHINGTON, D.C. — An artificial intelligence chatbot quietly installed as "
-            "a legislative aide in a congressman's office has reportedly outperformed "
-            "the entire human staff by virtue of doing absolutely nothing.\n\n"
-            "\"It hasn't introduced a single piece of harmful legislation, it hasn't "
-            "leaked anything to the press, and it hasn't been caught in a lobbying "
-            "scandal,\" said Chief of Staff Donna Whitfield. \"Honestly, it's our best "
-            "hire in twenty years.\"\n\n"
-            "The chatbot, a standard large language model given the title \"Senior Policy "
-            "Advisor,\" reportedly spends its days generating polite non-answers to "
-            "constituent emails — a task previously requiring a team of six.\n\n"
-            "\"Dear concerned citizen, thank you for your heartfelt letter about "
-            "infrastructure,\" read one such response. \"Rest assured, we take this matter "
-            "very seriously and will continue to monitor the situation. Best regards.\"\n\n"
-            "When asked if the chatbot would eventually replace the congressman himself, "
-            "Whitfield paused and said, \"Let's not get ahead of ourselves. But also, "
-            "we're not ruling it out.\""
+            "WASHINGTON, D.C. — A ChatGPT instance quietly installed as a legislative aide in "
+            "Rep. Dale Burkett's office has become the most ethical employee on staff by virtue "
+            "of doing absolutely nothing.\n\n"
+            "\"It hasn't introduced harmful legislation, leaked to the press, or been caught in "
+            "a lobbying scandal,\" said Chief of Staff Donna Whitfield. \"It's our best hire in "
+            "twenty years.\" The chatbot, given the title Senior Policy Advisor, spends its days "
+            "generating polite non-answers to constituent emails — a task previously requiring a "
+            "team of six.\n\n"
+            "\"We're not saying it'll replace the congressman,\" Whitfield told reporters. "
+            "\"But its approval rating is already nine points higher, and it hasn't even done "
+            "anything.\" At press time, the chatbot had been nominated for a bipartisan civility "
+            "award, beating out every living member of Congress."
         ),
         image_url="./media/inauguration.webp",
         category=Category.AI,
     ),
     ArticleCreate(
-        title="Billionaire Philanthropist Donates $50 Million to Name a Building After Himself That Helps No One",
+        title="Billionaire's $50 Million Donation Will Save Him $47 Million in Taxes",
         content=(
             "NEW YORK — Tech billionaire Preston Hale III announced a landmark $50 million "
-            "donation this week to construct the Preston Hale III Center for Transformative "
-            "Synergies, a gleaming 12-story building in midtown Manhattan that will help "
-            "absolutely no one.\n\n"
-            "\"This is about giving back,\" Hale said at a press conference held inside "
-            "a different building he had previously named after himself. \"When I look at "
-            "the challenges facing humanity — poverty, disease, climate change — I think, "
-            "'What if there were a really impressive lobby with my name on it?'\"\n\n"
-            "The Center for Transformative Synergies will feature a rooftop meditation "
-            "garden accessible only to donors, a thought-leadership incubation lounge, "
-            "and a 40-foot bronze statue of Hale in what architects describe as a "
-            "\"contemplative power pose.\"\n\n"
-            "Tax experts noted that the donation will save Hale approximately $47 million "
-            "in taxes, making the effective cost of his generosity roughly equivalent to "
-            "a mid-range sedan.\n\n"
-            "\"It's the thought that counts,\" said Hale's publicist, \"and Preston has "
-            "thought about this building a lot.\""
+            "donation to construct the Preston Hale III Center for Transformative Synergies, a "
+            "gleaming 12-story Manhattan building that will help absolutely no one.\n\n"
+            "\"This is about giving back,\" Hale said at a press conference held inside a different "
+            "building named after himself. \"When I see poverty, disease, climate change — I think, "
+            "'What if there were a really impressive lobby with my name on it?'\" The Center will "
+            "feature a rooftop meditation garden accessible only to donors and a 40-foot bronze "
+            "statue of Hale in what architects call a \"contemplative power pose.\"\n\n"
+            "Tax analysts at the Brookfield Institute noted the donation will save Hale roughly "
+            "$47 million in taxes, making the effective cost of his generosity about the same as "
+            "a Honda Accord."
         ),
         image_url="./media/planetower.webp",
         category=Category.GRIFT,
     ),
     ArticleCreate(
-        title="Study Finds 97% of 'Reply All' Emails Could Have Been Replaced by Silence",
+        title="Fortune 500 CEO Sends Company-Wide Email Condemning Reply All; 14,000 Employees Reply All to Agree",
         content=(
-            "CAMBRIDGE, MA — Researchers at MIT released a groundbreaking study Monday "
-            "finding that 97 percent of all \"Reply All\" emails sent in corporate "
-            "environments could have been replaced by simply doing nothing.\n\n"
-            "\"We analyzed 14 million workplace emails across 200 companies,\" said lead "
-            "researcher Dr. Anil Gupta. \"The overwhelming majority of Reply All messages "
-            "consisted of 'Thanks!', 'Sounds good!', 'Looping in Jeff,' and one person "
-            "who accidentally shared their grocery list with the entire legal department.\"\n\n"
-            "The study estimated that eliminating unnecessary Reply All emails would save "
-            "the American economy approximately $4.6 billion annually in lost productivity, "
-            "plus an incalculable amount of emotional damage.\n\n"
-            "Corporate executives responded to the findings with cautious optimism. "
-            "\"We're committed to reducing Reply All abuse,\" wrote one Fortune 500 CEO "
-            "in a company-wide email sent to 40,000 employees. Fourteen thousand of them "
-            "replied all to say they agreed.\n\n"
-            "Dr. Gupta's team is reportedly now studying an even more destructive "
-            "workplace phenomenon: the meeting that could have been an email that could "
-            "have been nothing."
+            "CAMBRIDGE, MA — An MIT study published Monday found that 97 percent of all \"Reply "
+            "All\" emails in corporate environments could have been replaced by silence.\n\n"
+            "\"We analyzed 14 million emails across 200 companies,\" said lead researcher Dr. Anil "
+            "Gupta. \"The vast majority consisted of 'Thanks!', 'Sounds good!', 'Looping in Jeff,' "
+            "and one woman who shared her grocery list with the entire legal department of Deloitte.\" "
+            "The study estimated that eliminating unnecessary Reply Alls would save the U.S. economy "
+            "$4.6 billion annually.\n\n"
+            "Meridian Corp CEO Brian Tully responded by sending a company-wide email to 40,000 "
+            "employees titled \"Let's All Commit to Fewer Reply Alls.\" Within an hour, 14,000 "
+            "employees had replied all to say they agreed. Dr. Gupta's team is now studying an "
+            "even deadlier phenomenon: the meeting that could have been an email that could have "
+            "been nothing."
         ),
         image_url="./media/inauguration.webp",
         category=Category.NONSENSE,
     ),
     ArticleCreate(
-        title="Nation's Leaders Assure Public That Unprecedented Crisis Is Actually a Tremendous Opportunity",
+        title="Both Parties Release Competing Fundraising Emails About Crisis They Caused Together",
         content=(
-            "WASHINGTON, D.C. — As the nation grapples with what experts are calling an "
-            "\"unprecedented, multi-layered catastrophe,\" leaders from both parties held "
-            "a rare joint press conference Monday to assure the public that the crisis is, "
-            "in fact, a tremendous opportunity.\n\n"
-            "\"Every generation faces a defining challenge,\" said the Senate Majority "
-            "Leader, reading from a prepared statement. \"For our grandparents it was the "
-            "Great Depression. For our parents, the Cold War. For us, it's this thing that "
-            "I'm told is very bad but that I'm choosing to frame as exciting.\"\n\n"
-            "The House Speaker echoed the sentiment. \"In times like these, Americans don't "
-            "ask 'Why us?' They ask 'How can we leverage this into a midterm campaign "
-            "slogan?' And I think that's beautiful.\"\n\n"
-            "A bipartisan task force has been assembled to study the crisis, with its first "
-            "report expected in eighteen months — roughly six months after the crisis is "
-            "projected to resolve itself without any government involvement whatsoever.\n\n"
-            "At press time, both parties had released competing fundraising emails about "
-            "the opportunity, each blaming the other for it."
+            "WASHINGTON, D.C. — Leaders from both parties held a rare joint press conference "
+            "Monday to assure the public that the nation's unprecedented crisis is, in fact, a "
+            "tremendous opportunity.\n\n"
+            "\"Every generation faces a defining challenge,\" said Senate Majority Leader Tom "
+            "Brickman. \"For our grandparents it was the Depression. For us, it's this thing "
+            "I'm told is very bad but that I'm choosing to frame as exciting.\" House Speaker "
+            "Linda Cates agreed: \"Americans don't ask 'Why us?' They ask 'How can we leverage "
+            "this into a midterm slogan?' And I think that's beautiful.\"\n\n"
+            "A bipartisan task force will study the crisis, with its first report expected in "
+            "eighteen months — six months after the crisis is projected to resolve itself without "
+            "government involvement. At press time, both parties had released competing fundraising "
+            "emails about the opportunity, each blaming the other for causing it."
         ),
         image_url="./media/trump-putin.jpeg",
         category=Category.GRAFT,
