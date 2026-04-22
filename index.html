@@ -3,61 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dikipedia -your daily dose of Satire</title>
+    <title>Dikipedia — Your Daily Dose of Satire</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="light-mode"> <!-- Default to light mode -->
-
+<body>
     <header>
-        <a href="/" class="logo" title="Dikipedia - your daily dose of Satire">KP</a>
-        <nav>
-            <a href="#home">Home</a>
-            <a href="#politics">Politics</a>
-            <a href="#science">Science</a>
-            <a href="#about">About</a>
-        </nav>
-        <button id="theme-toggle">🌙</button>
+        <div class="header-inner">
+            <div class="header-meta">
+                <span id="issue-date"></span>
+                <span class="meta-sep">·</span>
+                <span>Est. 2025</span>
+                <span class="meta-sep">·</span>
+                <span>100% Satirical</span>
+            </div>
+            <a href="/" class="logo">Dikipedia</a>
+            <p class="tagline">Your Daily Dose of Satire</p>
+            <div class="header-rule"></div>
+            <div class="nav-row">
+                <nav>
+                    <a href="#" class="active" data-category="all">All</a>
+                    <a href="#" data-category="politics">Politics</a>
+                    <a href="#" data-category="science">Science</a>
+                    <a href="#" data-category="tech">Tech</a>
+                    <a href="#" data-category="economy">Economy</a>
+                    <a href="#" data-category="world">World</a>
+                </nav>
+                <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+            </div>
+        </div>
     </header>
 
-    <div class="hero">
-        <h1>Government shutdown</h1>
-        <p>Dikipedia -your daily dose of satire</p>
-    </div>
-
     <main>
-        <section class="content" id="articles-container">
-            <!-- Articles will be loaded here by script.js -->
-        </section>
+        <div class="content-wrap">
+            <section class="articles-col" id="articles-container">
+                <div class="loading-state">
+                    <div class="skeleton skeleton-hero"></div>
+                    <div class="skeleton-grid">
+                        <div class="skeleton skeleton-card"></div>
+                        <div class="skeleton skeleton-card"></div>
+                        <div class="skeleton skeleton-card"></div>
+                        <div class="skeleton skeleton-card"></div>
+                    </div>
+                </div>
+            </section>
 
-        <aside>
-            <h3>Trending...</h3>
-            <article>
-                <img src="./media/inauguration.webp" alt="AI Congressional Aide">
-                <h3>AI Aide Becomes Office's Most Ethical Employee by Doing Nothing</h3>
-                <p>A ChatGPT instance in Rep. Burkett's office hasn't introduced harmful legislation or been caught in a lobbying scandal. Its approval rating is already nine points higher than the congressman's.</p>
-            </article>
-            <article>
-                <img src="./media/milei.jpeg" alt="Javier Milei">
-                <h3>Milei Announces 'Freedom-Compatible Subsidies'</h3>
-                <p>Argentina's president slammed Hayek on the podium while announcing exchange rate controls. "You must trap the butterfly in a jar first," he explained. The IMF responded: "We know."</p>
-            </article>
-            <article>
-                <img src="./media/trump-zelensky.webp" alt="Peace Deal Signing">
-                <h3>Historic Peace Deal Signed by Two Nations Who Did Not Read It</h3>
-                <p>Page 214 of the 400-page agreement accidentally cedes a major seaport to Finland, a country that was not part of the negotiations.</p>
-            </article>
-            <article>
-                <img src="./media/trump-putin.jpeg" alt="Bipartisan Crisis">
-                <h3>Both Parties Release Competing Fundraising Emails About Crisis They Caused Together</h3>
-                <p>A bipartisan task force will study the crisis, with its first report due eighteen months from now — six months after the crisis resolves itself.</p>
-            </article>
-        </aside>
+            <aside class="sidebar">
+                <div class="sidebar-widget">
+                    <h4 class="widget-title">Trending</h4>
+                    <ol id="trending-container" class="trending-list">
+                        <li class="skeleton skeleton-text"></li>
+                        <li class="skeleton skeleton-text"></li>
+                        <li class="skeleton skeleton-text"></li>
+                    </ol>
+                </div>
+
+                <div class="sidebar-widget sidebar-quote">
+                    <blockquote>"Satire is the closest thing to the truth."</blockquote>
+                    <cite>— Some pundit, probably</cite>
+                </div>
+
+                <div class="sidebar-widget sidebar-disclaimer">
+                    <p class="disclaimer-label">DISCLAIMER</p>
+                    <p>Nothing here is real. Any resemblance to actual events is a coincidence and also kind of depressing.</p>
+                </div>
+            </aside>
+        </div>
     </main>
-    
+
     <footer>
-        <p>&copy; Dikipedia 2025. All rights reserved. (Not really)</p>
+        <div class="footer-inner">
+            <span class="footer-logo">Dikipedia</span>
+            <p>All events depicted are fictional, which is unfortunate because they're all plausible.</p>
+            <p class="footer-copy">&copy; 2025 Dikipedia. All rights not reserved.</p>
+        </div>
     </footer>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
