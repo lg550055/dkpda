@@ -15,9 +15,10 @@ BASE_DIR = Path(__file__).resolve().parent
 DEFAULT_DB = f"sqlite:///{BASE_DIR / 'articles.db'}"
 DATABASE_URL = os.getenv("DATABASE_URL", DEFAULT_DB)
 
+_connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False},
+    connect_args=_connect_args,
     future=True,
 )
 SessionLocal = Session
