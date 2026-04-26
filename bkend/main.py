@@ -60,10 +60,12 @@ if raw_origins:
     allow_origins = parsed_origins or DEFAULT_CORS_ORIGINS
 else:
     allow_origins = DEFAULT_CORS_ORIGINS
+origin_regex = os.getenv("CORS_ORIGIN_REGEX", None)
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allow_origins,
+    allow_origin_regex=origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

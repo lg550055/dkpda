@@ -8,7 +8,6 @@ from bkend.schemas import ArticleCreate, Category
 from bkend.crud import create_user, get_user_by_email, create_article, get_articles_with_votes
 
 
-
 PWD_CONTEXT = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 
