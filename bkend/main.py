@@ -1,7 +1,6 @@
 import os
 import hashlib
 from datetime import datetime, timedelta
-from typing import List, Optional
 
 from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -26,7 +25,7 @@ from crud import (
 from models import Article, User, Vote, engine, init_db
 
 # Configuration
-SECRET_KEY = "your-secret-key-change-in-production"
+SECRET_KEY = os.getenv("SECRET_KEY", "secret-key-placeholder")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -105,7 +104,7 @@ def get_password_hash(password):
     return pwd_context.hash(sha_hex)
 
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -142,7 +141,7 @@ async def get_admin_user(current_user: User = Depends(get_current_user)):
     return current_user
 
 
-async def optional_current_user(request: Request, db: Session = Depends(get_db)) -> Optional[User]:
+async def optional_current_user(request: Request, db: Session = Depends(get_db)) -> User | None:
     """Return the current user if a valid token is present, otherwise None.
 
     This helper lets endpoints be open to anonymous users while still
@@ -196,7 +195,7 @@ async def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
 
 
-@app.get("/admin/users", response_model=List[schemas.UserResponse])
+@app.get("/admin/users", response_model=list[schemas.UserResponse])
 def list_all_users(current_user: User = Depends(get_admin_user), db: Session = Depends(get_db)):
     """Admin-only: return all users"""
     users_q = select(User)
@@ -218,9 +217,9 @@ def create_article(
     return {**db_article.__dict__, "upvotes": 0, "downvotes": 0, "user_vote": None}
 
 
-@app.get("/articles", response_model=List[schemas.ArticleResponse])
+@app.get("/articles", response_model=list[schemas.ArticleResponse])
 def get_articles(
-    current_user: Optional[User] = Depends(optional_current_user),
+    current_user: User | None = Depends(optional_current_user),
     db: Session = Depends(get_db)
 ):
     user_id = current_user.id if current_user is not None else 0
@@ -230,7 +229,7 @@ def get_articles(
 @app.get("/articles/{article_id}", response_model=schemas.ArticleResponse)
 def get_article(
     article_id: int,
-    current_user: Optional[User] = Depends(optional_current_user),
+    current_user: User | None = Depends(optional_current_user),
     db: Session = Depends(get_db)
 ):
     user_id = current_user.id if current_user is not None else 0

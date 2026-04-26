@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from typing import Any, Optional
+from typing import Any
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -8,7 +8,7 @@ from models import Article, User, Vote
 from schemas import VoteType, ArticleCreate
 
 # Users
-def get_user_by_email(db: Session, email: str) -> Optional[User]:
+def get_user_by_email(db: Session, email: str) -> User | None:
     return db.execute(select(User).where(User.email == email)).scalars().first()
 
 
@@ -77,7 +77,7 @@ def get_article_with_votes(
         db: Session,
         article_id: int,
         current_user_id: int
-    ) -> Optional[dict[str, Any]]:
+    ) -> dict[str, Any] | None:
     article_q = select(Article).where(Article.id == article_id)
     article = db.execute(article_q).scalars().first()
     if not article:
@@ -123,10 +123,10 @@ def get_article_with_votes(
 def update_article(
         db: Session,
         article_id: int,
-        title: Optional[str],
-        content: Optional[str],
-        image_url: Optional[str]
-    )-> Optional[Article]:
+        title: str | None,
+        content: str | None,
+        image_url: str | None
+    )-> Article | None:
     article_q = select(Article).where(Article.id == article_id)
     article = db.execute(article_q).scalars().first()
     if not article:
@@ -152,7 +152,7 @@ def delete_article(db: Session, article_id: int) -> bool:
     return True
 
 # Votes
-def get_user_vote(db: Session, article_id: int, user_id: int) -> Optional[Vote]:
+def get_user_vote(db: Session, article_id: int, user_id: int) -> Vote | None:
     return db.execute(select(Vote).where(Vote.article_id == article_id, Vote.user_id == user_id)).scalars().first()
 
 
