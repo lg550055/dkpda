@@ -1,4 +1,4 @@
-import enum
+from enum import Enum
 from datetime import datetime
 from typing import Optional
 
@@ -8,11 +8,11 @@ from pydantic import BaseModel, ConfigDict, EmailStr
 # separate top-level module (like `types.py`) which can shadow stdlib
 # modules and cause import-time issues. Keeping the enum next to the schemas
 # that consume it reduces import-time complications.
-class VoteType(enum.Enum):
+class VoteType(Enum):
     UPVOTE = "upvote"
     DOWNVOTE = "downvote"
 
-class Category(enum.Enum):
+class Category(Enum):
     CRONY = "crony"
     NONSENSE = "NONSENSE"
     AI = "ai-please-save-us"

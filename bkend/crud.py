@@ -1,11 +1,11 @@
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from .models import Article, User, Vote
-from .schemas import VoteType, ArticleCreate
+from models import Article, User, Vote
+from schemas import VoteType, ArticleCreate
 
 # Users
 def get_user_by_email(db: Session, email: str) -> Optional[User]:
@@ -28,7 +28,7 @@ def create_article(db: Session, article_data: ArticleCreate, author_id: int) -> 
     return article
 
 
-def get_articles_with_votes(db: Session, current_user_id: int) -> List[Dict[str, Any]]:
+def get_articles_with_votes(db: Session, current_user_id: int) -> list[dict[str, Any]]:
     articles = db.execute(select(Article)).scalars().all()
     result = []
     for article in articles:
@@ -77,7 +77,7 @@ def get_article_with_votes(
         db: Session,
         article_id: int,
         current_user_id: int
-    ) -> Optional[Dict[str, Any]]:
+    ) -> Optional[dict[str, Any]]:
     article_q = select(Article).where(Article.id == article_id)
     article = db.execute(article_q).scalars().first()
     if not article:

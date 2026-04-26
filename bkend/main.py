@@ -11,8 +11,8 @@ from passlib.context import CryptContext
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session, sessionmaker
 
-from . import schemas
-from .crud import (
+import schemas
+from crud import (
     add_or_toggle_vote,
     create_article as crud_create_article,
     create_user,
@@ -23,8 +23,7 @@ from .crud import (
     remove_vote as crud_remove_vote,
     update_article as crud_update_article,
 )
-from .models import Article, User, Vote, engine, init_db
-from .schemas import VoteType
+from models import Article, User, Vote, engine, init_db
 
 # Configuration
 SECRET_KEY = "your-secret-key-change-in-production"
@@ -260,12 +259,12 @@ def update_article(
     upvotes = db.execute(
         select(func.count())
         .select_from(Vote)
-        .where(Vote.article_id == db_article.id, Vote.vote_type == VoteType.UPVOTE)
+        .where(Vote.article_id == db_article.id, Vote.vote_type == schemas.VoteType.UPVOTE)
         ).scalar_one()
     downvotes = db.execute(
         select(func.count())
         .select_from(Vote)
-        .where(Vote.article_id == db_article.id, Vote.vote_type == VoteType.DOWNVOTE)
+        .where(Vote.article_id == db_article.id, Vote.vote_type == schemas.VoteType.DOWNVOTE)
         ).scalar_one()
     return {**db_article.__dict__, "upvotes": upvotes, "downvotes": downvotes, "user_vote": None}
 

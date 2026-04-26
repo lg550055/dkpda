@@ -1,13 +1,13 @@
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional
 import os
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, String, create_engine
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.orm import Mapped, Session, declarative_base, mapped_column, relationship
 
-from .schemas import VoteType, Category
+from schemas import VoteType, Category
 
 # Database URL comes from the environment (DATABASE_URL). If not provided,
 # default to a sqlite file placed next to this module (bkend/articles.db).
@@ -38,7 +38,7 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
     is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(timezone.utc))
-    votes: Mapped[List["Vote"]] = relationship(
+    votes: Mapped[list["Vote"]] = relationship(
         "Vote",
         back_populates="user",
     )
@@ -59,7 +59,7 @@ class Article(Base):
         onupdate=datetime.now(timezone.utc),
     )
     author: Mapped[Optional[User]] = relationship("User")
-    votes: Mapped[List["Vote"]] = relationship(
+    votes: Mapped[list["Vote"]] = relationship(
         "Vote",
         back_populates="article",
         cascade="all, delete-orphan",
