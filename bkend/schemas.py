@@ -12,11 +12,11 @@ class VoteType(Enum):
     DOWNVOTE = "downvote"
 
 class Category(Enum):
-    CRONY = "crony"
+    CRONY = "CRONY"
     NONSENSE = "NONSENSE"
-    AI = "ai-please-save-us"
-    GRIFT = "grift"
-    GRAFT = "graft"
+    AI = "AI"
+    GRIFT = "GRIFT"
+    GRAFT = "GRAFT"
 
 
 class UserCreate(BaseModel):

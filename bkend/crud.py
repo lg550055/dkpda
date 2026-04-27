@@ -21,7 +21,8 @@ def create_user(db: Session, email: str, hashed_password: str) -> User:
 
 # Articles
 def create_article(db: Session, article_data: ArticleCreate, author_id: int) -> Article:
-    article = Article(**article_data.model_dump(), author_id=author_id)
+    data = article_data.model_dump(mode='json')
+    article = Article(**data, author_id=author_id)
     db.add(article)
     db.commit()
     db.refresh(article)

@@ -188,38 +188,34 @@ def main() -> None:
     with Session(models.engine) as db:
         user = get_user_by_email(db, email=email)
         if user:
-            if getattr(user, "is_admin", False):
-                print(f"User {email} already exists and is an admin")
-                articles = get_articles_with_votes(db, user.id)
-                print("Articles in db: ", articles)
-                return
-            user.is_admin = True
-            db.commit()
-            print(f"Existing user {email} promoted to admin")
-            return
-
-        hashed = get_password_hash(raw_password)
-        create_user(db, email=email, hashed_password=hashed)
-        # Ensure the created user is marked admin
-        created = get_user_by_email(db, email=email)
-        if created:
-            created.is_admin = True
-            db.commit()
-            print(f"Created admin user {email} with password '{raw_password}'")
-        else:
-            print("Failed to create admin user")
-
-        # Create satirical articles authored by the admin if they don't exist
-        admin_user = created
-        if admin_user:
-            existing_articles = db.execute(select(models.Article)).scalars().all()
-            if not existing_articles:
-                print("Adding satirical articles...")
-                for art_data in SEED_ARTICLES:
-                    create_article(db, art_data, author_id=admin_user.id)
-                print(f"Added {len(SEED_ARTICLES)} satirical articles")
+            if not getattr(user, "is_admin", False):
+                user.is_admin = True
+                db.commit()
+                print(f"Existing user {email} promoted to admin")
             else:
-                print("Articles already present; skipping article creation")
+                print(f"User {email} already exists and is an admin")
+            admin_user = user
+        else:
+            hashed = get_password_hash(raw_password)
+            create_user(db, email=email, hashed_password=hashed)
+            admin_user = get_user_by_email(db, email=email)
+            if admin_user:
+                admin_user.is_admin = True
+                db.commit()
+                print(f"Created admin user {email} with password '{raw_password}'")
+            else:
+                print("Failed to create admin user")
+                return
+
+        # Always check and seed articles regardless of whether user was just created
+        existing_articles = db.execute(select(models.Article)).scalars().all()
+        if not existing_articles:
+            print("Adding satirical articles...")
+            for art_data in SEED_ARTICLES:
+                create_article(db, art_data, author_id=admin_user.id)
+            print(f"Added {len(SEED_ARTICLES)} satirical articles")
+        else:
+            print(f"Articles already present ({len(existing_articles)}); skipping article creation")
 
 
 # Helper function to update the image_url of an article by its id

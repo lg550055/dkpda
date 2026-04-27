@@ -1,7 +1,8 @@
+import os
 from datetime import datetime, timezone
+from dotenv import load_dotenv
 from pathlib import Path
 from typing import Optional
-import os
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, String, create_engine
 from sqlalchemy import Enum as SQLEnum
@@ -9,6 +10,7 @@ from sqlalchemy.orm import Mapped, Session, declarative_base, mapped_column, rel
 
 from schemas import VoteType, Category
 
+load_dotenv()
 # Database URL comes from the environment (DATABASE_URL). If not provided,
 # default to a sqlite file placed next to this module (bkend/articles.db).
 BASE_DIR = Path(__file__).resolve().parent
@@ -50,7 +52,10 @@ class Article(Base):
     title: Mapped[str] = mapped_column(String, nullable=False)
     content: Mapped[str] = mapped_column(String, nullable=False)
     image_url: Mapped[str] = mapped_column(String, nullable=True)
-    category: Mapped[Category] = mapped_column(SQLEnum(Category), default=Category.GRAFT)
+    category: Mapped[Category] = mapped_column(
+        SQLEnum(Category, native_enum=False),
+        default=Category.GRAFT
+    )
     author_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(timezone.utc))
     updated_at: Mapped[datetime] = mapped_column(

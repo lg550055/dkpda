@@ -25,6 +25,7 @@ pydantic==2.12.1
 pydantic_core==2.41.3
 Pygments==2.19.2
 pytest==8.4.2
+python-dotenv==1.2.2
 python-jose==3.5.0
 python-multipart==0.0.20
 rsa==4.9.1
