@@ -1,5 +1,18 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    // --- Header height for sidebar sticky positioning ---
+    const headerEl = document.querySelector('header');
+    function syncHeaderHeight() {
+        if (headerEl) {
+            document.documentElement.style.setProperty(
+                '--header-height',
+                headerEl.offsetHeight + 'px'
+            );
+        }
+    }
+    syncHeaderHeight();
+    window.addEventListener('resize', syncHeaderHeight);
+
     // --- Theme ---
     const toggleBtn = document.getElementById('theme-toggle');
     const body = document.body;
@@ -147,9 +160,19 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        const topLabel = document.createElement('span');
+        topLabel.className = 'section-label';
+        topLabel.textContent = 'Top Story';
+        articlesContainer.appendChild(topLabel);
+
         articlesContainer.appendChild(createFeaturedArticle(filtered[0]));
 
         if (filtered.length > 1) {
+            const label = document.createElement('span');
+            label.className = 'section-label';
+            label.textContent = 'Latest Stories';
+            articlesContainer.appendChild(label);
+
             const grid = document.createElement('div');
             grid.className = 'articles-grid';
             filtered.slice(1).forEach(a => grid.appendChild(createArticleCard(a)));
