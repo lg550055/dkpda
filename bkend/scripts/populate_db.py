@@ -28,7 +28,7 @@ SEED_ARTICLES = [
             "Service.\" Congress has scheduled an emergency session to address the crisis but "
             "cannot agree on which day of the week it is."
         ),
-        image_url="./media/gvmtshtdwn.webp",
+        image_url="./media/planetower.webp",
         category=Category.GRAFT,
     ),
     ArticleCreate(
@@ -117,7 +117,7 @@ SEED_ARTICLES = [
             "$47 million in taxes, making the effective cost of his generosity about the same as "
             "a Honda Accord."
         ),
-        image_url="./media/planetower.webp",
+        image_url="./media/gvmtshtdwn.webp",
         category=Category.GRIFT,
     ),
     ArticleCreate(
@@ -136,7 +136,7 @@ SEED_ARTICLES = [
             "even deadlier phenomenon: the meeting that could have been an email that could have "
             "been nothing."
         ),
-        image_url="./media/trump-putin.jpeg",
+        image_url="./media/wall-street.jpg",
         category=Category.NONSENSE,
     ),
     ArticleCreate(
@@ -155,7 +155,7 @@ SEED_ARTICLES = [
             "government involvement. At press time, both parties had released competing fundraising "
             "emails about the opportunity, each blaming the other for causing it."
         ),
-        image_url="./media/inauguration.webp",
+        image_url="./media/trump-putin.jpeg",
         category=Category.GRAFT,
     ),
 ]
@@ -243,5 +243,8 @@ if __name__ == "__main__":
         (2, "./media/crypto-moguls.webp"),
         (3, "./media/milei.jpeg"),
         (4, "./media/trump-zelensky.webp"),
+        (6, "./media/gvmtshtdwn.webp"),
+        (7, "./media/wall-street.jpg"),
+        (8, "./media/trump-putin.jpeg"),
     ]
     update_existing_articles_images(articles_to_update)
