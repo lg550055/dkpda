@@ -37,7 +37,7 @@ def create_article(db: Session, article_data: ArticleCreate, author_id: int) -> 
 
 
 def get_articles_with_votes(db: Session, current_user_id: int) -> list[dict[str, Any]]:
-    articles = db.execute(select(Article)).scalars().all()
+    articles = db.execute(select(Article).order_by(Article.created_at.desc())).scalars().all()
     result = []
     for article in articles:
         upvotes_q = (
