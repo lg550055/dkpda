@@ -136,7 +136,7 @@ SEED_ARTICLES = [
             "even deadlier phenomenon: the meeting that could have been an email that could have "
             "been nothing."
         ),
-        image_url="./media/inauguration.webp",
+        image_url="./media/trump-putin.jpeg",
         category=Category.NONSENSE,
     ),
     ArticleCreate(
@@ -155,7 +155,7 @@ SEED_ARTICLES = [
             "government involvement. At press time, both parties had released competing fundraising "
             "emails about the opportunity, each blaming the other for causing it."
         ),
-        image_url="./media/trump-putin.jpeg",
+        image_url="./media/inauguration.webp",
         category=Category.GRAFT,
     ),
 ]

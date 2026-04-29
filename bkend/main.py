@@ -211,11 +211,14 @@ def create_article(
     current_user: User = Depends(get_admin_user),
     db: Session = Depends(get_db)
 ):
-    db_article = crud_create_article(
-        db,
-        article,
-        author_id=current_user.id,
-    )
+    try:
+        db_article = crud_create_article(
+            db,
+            article,
+            author_id=current_user.id,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc))
     return {**db_article.__dict__, "upvotes": 0, "downvotes": 0, "user_vote": None}
 
 
@@ -248,13 +251,16 @@ def update_article(
     _current_user: User = Depends(get_admin_user),
     db: Session = Depends(get_db)
 ):
-    db_article = crud_update_article(
-        db,
-        article_id=article_id,
-        title=article_update.title,
-        image_url=article_update.image_url,
-        content=article_update.content
-    )
+    try:
+        db_article = crud_update_article(
+            db,
+            article_id=article_id,
+            title=article_update.title,
+            image_url=article_update.image_url,
+            content=article_update.content,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc))
     if not db_article:
         raise HTTPException(status_code=404, detail="Article not found")
     upvotes = db.execute(

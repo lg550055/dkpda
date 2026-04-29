@@ -20,8 +20,15 @@ def create_user(db: Session, email: str, hashed_password: str) -> User:
     return user
 
 # Articles
+def get_used_image_urls(db: Session) -> set[str]:
+    rows = db.execute(select(Article.image_url).where(Article.image_url.isnot(None))).scalars().all()
+    return set(rows)
+
+
 def create_article(db: Session, article_data: ArticleCreate, author_id: int) -> Article:
     data = article_data.model_dump(mode='json')
+    if data.get("image_url") and data["image_url"] in get_used_image_urls(db):
+        raise ValueError(f"image_url '{data['image_url']}' is already used by another article")
     article = Article(**data, author_id=author_id)
     db.add(article)
     db.commit()
@@ -136,7 +143,12 @@ def update_article(
         article.title = title
     if content is not None:
         article.content = content
-    if image_url is not None:
+    if image_url is not None and image_url != article.image_url:
+        used = get_used_image_urls(db)
+        if image_url in used:
+            raise ValueError(f"image_url '{image_url}' is already used by another article")
+        article.image_url = image_url
+    elif image_url is not None:
         article.image_url = image_url
     article.updated_at = datetime.now(timezone.utc)
     db.commit()
