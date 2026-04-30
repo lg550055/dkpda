@@ -1,5 +1,7 @@
 import os
 import hashlib
+import logging
+from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 
 from fastapi import Depends, FastAPI, HTTPException, Request, status
@@ -7,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 from sqlalchemy.orm import Session, sessionmaker
 
 import schemas
@@ -24,10 +26,45 @@ from crud import (
 )
 from models import Article, User, Vote, engine, init_db
 
+logger = logging.getLogger(__name__)
+
 # Configuration
 SECRET_KEY = os.getenv("SECRET_KEY", "secret-key-placeholder")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+# Startup migration: assign unique images to any articles that still share an image_url.
+# Maps article ID → correct unique image path. Idempotent: only updates rows whose
+# current image_url differs from the target (so repeated restarts are a no-op).
+_IMAGE_FIXES: dict[int, str] = {
+    6:  "./media/gvmtshtdwn.webp",
+    7:  "./media/wall-street.jpg",
+    9:  "./media/iran-nuclear.jpg",
+    10: "./media/press-corps.jpg",
+    11: "./media/congress-session.jpg",
+}
+
+
+def _apply_image_fixes(db: Session) -> None:
+    for article_id, target_url in _IMAGE_FIXES.items():
+        db.execute(
+            update(Article)
+            .where(Article.id == article_id, Article.image_url != target_url)
+            .values(image_url=target_url)
+        )
+    db.commit()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    with Session(engine) as db:
+        try:
+            _apply_image_fixes(db)
+            logger.info("Startup image-dedup migration applied.")
+        except Exception as exc:
+            logger.warning("Startup image-dedup migration failed: %s", exc)
+    yield
+
 
 # Database setup
 # SessionLocal is a simple factory returning SQLAlchemy Session instances
@@ -41,7 +78,7 @@ init_db()
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-app = FastAPI(title="Article Voting System")
+app = FastAPI(title="Article Voting System", lifespan=lifespan)
 
 # CORS configuration
 # Allow origins configured via BACKEND_CORS_ORIGINS env var as a comma-separated
