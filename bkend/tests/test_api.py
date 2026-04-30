@@ -1,28 +1,27 @@
 import asyncio
+import os
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import StaticPool
 
 from bkend import models, crud, main as app_main
 from bkend.schemas import VoteType, UserCreate, ArticleCreate, ArticleUpdate, VoteCreate
 
+TEST_DB_URL = os.environ["DATABASE_URL"]
+
 
 @pytest.fixture()
 def in_memory_session():
-    engine = create_engine(
-        "sqlite:///:memory:",
-        connect_args={"check_same_thread": False},
-        poolclass=StaticPool,
-        future=True,
-    )
-    models.init_db(engine_override=engine)
+    engine = create_engine(TEST_DB_URL, future=True)
+    models.Base.metadata.create_all(bind=engine)
     Session = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
     session = Session()
     try:
         yield session
     finally:
         session.close()
+        models.Base.metadata.drop_all(bind=engine)
+        engine.dispose()
 
 
 def test_register_endpoint(in_memory_session):

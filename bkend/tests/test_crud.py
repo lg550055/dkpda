@@ -1,29 +1,26 @@
+import os
 import pytest
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
 from bkend import models, crud
 from bkend.schemas import VoteType, ArticleCreate
 
+TEST_DB_URL = os.environ["DATABASE_URL"]
+
 
 @pytest.fixture()
 def in_memory_db():
-    # Use an in-memory SQLite database for tests
-    from sqlalchemy.pool import StaticPool
-    engine = create_engine(
-        "sqlite:///:memory:",
-        connect_args={"check_same_thread": False},
-        poolclass=StaticPool,
-        future=True,
-    )
-    # create tables
-    models.init_db(engine_override=engine)
+    engine = create_engine(TEST_DB_URL, future=True)
+    models.Base.metadata.create_all(bind=engine)
     Session = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
     session = Session()
     try:
         yield session
     finally:
         session.close()
+        models.Base.metadata.drop_all(bind=engine)
+        engine.dispose()
 
 
 def test_create_user_and_lookup(in_memory_db):

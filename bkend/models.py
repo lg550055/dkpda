@@ -1,7 +1,6 @@
 import os
 from datetime import datetime, timezone
 from dotenv import load_dotenv
-from pathlib import Path
 from typing import Optional
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, String, create_engine
@@ -11,16 +10,12 @@ from sqlalchemy.orm import Mapped, Session, declarative_base, mapped_column, rel
 from schemas import VoteType, Category
 
 load_dotenv()
-# Database URL comes from the environment (DATABASE_URL). If not provided,
-# default to a sqlite file placed next to this module (bkend/articles.db).
-BASE_DIR = Path(__file__).resolve().parent
-DEFAULT_DB = f"sqlite:///{BASE_DIR / 'articles.db'}"
-DATABASE_URL = os.getenv("DATABASE_URL", DEFAULT_DB)
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL environment variable must be set")
 
-_connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 engine = create_engine(
     DATABASE_URL,
-    connect_args=_connect_args,
     future=True,
 )
 SessionLocal = Session
