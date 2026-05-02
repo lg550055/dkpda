@@ -98,12 +98,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         el.innerHTML = `
             <div class="article-featured-img" style="${imgStyle}">
-                <div class="article-featured-overlay">
-                    <span class="article-category">${article.category || 'General'}</span>
-                    <h2 class="article-featured-title">${article.title}</h2>
-                </div>
+                <div class="article-featured-overlay"></div>
             </div>
             <div class="article-body">
+                <span class="article-category">${article.category || 'General'}</span>
+                <h2 class="article-featured-title">${article.title}</h2>
                 <p class="article-excerpt">${article.content}</p>
                 ${metaHTML(article)}
             </div>

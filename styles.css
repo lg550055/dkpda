@@ -251,11 +251,7 @@ main {
 .article-featured-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.25) 60%, transparent 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 1.75rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.15) 0%, transparent 40%);
 }
 
 .article-featured-title {
@@ -263,9 +259,9 @@ main {
     font-size: clamp(1.6rem, 3vw, 2.4rem);
     font-weight: 700;
     line-height: 1.2;
-    color: #ffffff;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+    color: var(--text);
     margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
 }
 
 .article-featured .article-body {
@@ -360,7 +356,7 @@ main {
 
 .article-featured .article-category {
     margin-bottom: 0.35rem;
-    align-self: flex-start;
+    display: inline-block;
 }
 
 .article-meta {
