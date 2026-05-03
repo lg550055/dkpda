@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const el = document.createElement('article');
         el.className = 'article-featured';
         el.dataset.category = categoryOf(article);
+        el.dataset.id = article.id;
 
         const imgStyle = article.image_url
             ? `background-image: url('${article.image_url}')`
@@ -114,6 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const el = document.createElement('article');
         el.className = 'article-card';
         el.dataset.category = categoryOf(article);
+        el.dataset.id = article.id;
 
         el.innerHTML = `
             ${article.image_url ? `<img src="${article.image_url}" alt="${article.title}" class="card-img" loading="lazy">` : ''}
@@ -178,6 +180,64 @@ document.addEventListener('DOMContentLoaded', function () {
             articlesContainer.appendChild(grid);
         }
     }
+
+    // --- Article detail modal ---
+    const modal = document.getElementById('article-modal');
+    const modalBody = document.getElementById('modal-body');
+    const modalClose = document.getElementById('modal-close');
+    const backdrop = modal.querySelector('.article-modal-backdrop');
+
+    function openModal(article) {
+        const imgHTML = article.image_url
+            ? `<img src="${article.image_url}" alt="${article.title}" class="modal-article-img">`
+            : `<div class="modal-article-img-placeholder">No image</div>`;
+
+        modalBody.innerHTML = `
+            ${imgHTML}
+            <div class="modal-article-body">
+                <span class="article-category">${article.category || 'General'}</span>
+                <h2 class="modal-article-title" id="modal-title">${article.title}</h2>
+                <p class="modal-article-content">${article.content}</p>
+                ${metaHTML(article)}
+            </div>
+        `;
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        modalClose.focus();
+    }
+
+    function closeModal() {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', closeModal);
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+
+    async function handleArticleClick(e) {
+        const btn = e.target.closest('.vote-btn');
+        if (btn) return; // let voting handler deal with this
+
+        const articleEl = e.target.closest('.article-featured, .article-card');
+        if (!articleEl) return;
+
+        const articleId = articleEl.dataset.id;
+        if (!articleId) return;
+
+        try {
+            const res = await fetch(`http://localhost:8000/articles/${articleId}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const article = await res.json();
+            openModal(article);
+        } catch (err) {
+            console.error('Failed to load article', err);
+        }
+    }
+
+    articlesContainer.addEventListener('click', handleArticleClick);
 
     // --- Voting ---
     articlesContainer.addEventListener('click', async function (e) {
